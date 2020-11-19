@@ -3,15 +3,20 @@ package com.game.projet.company;
 import javax.swing.*;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 public class MyWindows extends JFrame {
     public MyWindows() throws UnsupportedLookAndFeelException {
         super("Gestion de la bibliothèque");
+
         //this.setBackground(Color.green);
         this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(400,400);
-        this.setLocationRelativeTo(null);
+        this.setSize(600,800);
+        //this.setLocationRelativeTo(null);
+        Biblio maBiblio=new Biblio();
 
 
         /**************   Seconde couche *********************/
@@ -26,38 +31,7 @@ public class MyWindows extends JFrame {
         container.setLayout(monLayout);
 
 
-        // GridBagLayout gridbag = new GridBagLayout();
 
-        //GridBagConstraints c = new GridBagConstraints();
-
-        // setFont(new Font("SansSerif", Font.PLAIN, 14));
-
-        //container.setLayout(gridbag);
-
-
-
-
-        /************************ table ************************/
-        //String [] colonnes ={"Nom","Prenom", "Age"};
-        //String [][] data=new String[6][3];
-     //   JTable table =new JTable(data, colonnes);
-
-       // c.fill = GridBagConstraints.NORTH;
-        //c.weightx = 1.0;
-
-        //c.gridx=0;
-       // c.gridy=0;
-       // container.add(table,c);
-
-
-
-        /********************* 1 er  Attribus  Titre  **************/
-        //JLabel labelTitre = new JLabel();
-
-        //labelTitre.setText("Titre : ");
-       // c.gridx=1;
-        //c.gridy=0;
-       // container.add(labelTitre,c);
 
 
         JLabel refeLivre = new JLabel("Référence : " );                                 /***** La reference ****/
@@ -65,7 +39,6 @@ public class MyWindows extends JFrame {
         reference.setPreferredSize(new Dimension(100, 25));
         container.add(refeLivre);
         container.add(reference);
-
 
 
         JLabel tireLivre = new JLabel("Titre : " );                                 /***** Le titre ****/
@@ -110,12 +83,70 @@ public class MyWindows extends JFrame {
         container.add(langueLivre);
         container.add(langue);
 
-       JButton tLivres = new JButton(" Tout les lires");                        /****  Boutton  pour afficher tous les livres****/
+
+
+        JTextField zoneAfficher = new JTextField();                                 /***  Zone d'affichage ****/
+        zoneAfficher.setPreferredSize(new Dimension(200,200));
+        container.add(zoneAfficher);
+
+        JTextField zoneAfficher2 = new JTextField();                                 /***  Zone d'affichage ****/
+        zoneAfficher2.setPreferredSize(new Dimension(200,200));
+        container.add(zoneAfficher2);
+
+
+        JButton ajoutLivre =new JButton();
+        ajoutLivre.setText("Ajouter");
+
+        ajoutLivre.addActionListener(new ActionListener() {
+                                         @Override
+                                         public void actionPerformed(ActionEvent e) {
+
+                                             createBook(titre.getText().trim(),
+                                                        auteur.getText().trim(),
+                                                        Integer.parseInt(annee.getText().trim()),
+                                                        maison.getText().trim(),
+                                                        langue.getText().trim(),
+                                                        Integer.parseInt(reference.getText().trim()),
+                                                        maBiblio);
+                                             clean(  titre, auteur, annee,
+                                                     maison,langue,reference);
+
+
+                                         }
+                                     });
+        container.add(ajoutLivre);
+
+
+
+        JButton tLivres = new JButton(" Tout les lires");                        /****  Boutton  pour afficher tous les livres****/
        container.add(tLivres);
+
+
+
+
 
         JButton titreA = new JButton(" livre titres A");                        /****  Boutton  pour afficher tous les livres
                                                                                         dont le titre commence par A****/
+       titreA.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               getAllBooksWhithIDSNOddTextField(maBiblio,zoneAfficher2);
+           }
+       });
+
         container.add(titreA);
+
+
+
+
+        tLivres.addActionListener( new ActionListener() {
+                                       public void actionPerformed(ActionEvent e) {
+                                           affichLivreBiblio(maBiblio, zoneAfficher);
+                                       }
+                                   }
+        );
+
+
 
 
         JButton refAmpaire = new JButton(" Référence Imapaire");              /****  Boutton  pour afficher tous les livres****/
@@ -125,27 +156,95 @@ public class MyWindows extends JFrame {
 
 
 
+        JMenuBar monMenu = new JMenuBar();
+        this.setJMenuBar(monMenu);
+
+        JMenu menuFichier = new JMenu("Fichier");
+        monMenu.add(menuFichier);
+
+        JMenuItem subMenuExit = new JMenuItem("Exit");
+        JMenuItem subMenuNew = new JMenuItem("Nouveau");
+
+        menuFichier.add(subMenuNew);
+        menuFichier.add(subMenuExit);
+
+
+
+        JMenu menuEdition = new JMenu("Edition");
+        monMenu.add(menuEdition);
+
+        JMenuItem subMenuCopy = new JMenuItem("Copier");
+        JMenuItem subMenuPaste = new JMenuItem("Coller");
+
+        menuEdition.add(subMenuCopy);
+        menuEdition.add(subMenuPaste);
+    }
 
 
 
 
 
 
+    private void affichLivreBiblio(Biblio maBiblio, JTextField  labelCR) {
+        String cr = "";
+        for (int i = 0; i< maBiblio.getListDeLivres().size(); i++){
+
+            cr +=     maBiblio.getListDeLivres().get(i).getIndiceRef()+" \n "
+                      +maBiblio.getListDeLivres().get(i).getTitre() + " \n "
+                      +maBiblio.getListDeLivres().get(i).getAuteur() +" \n "
+                      +maBiblio.getListDeLivres().get(i).getEditeur()+" \n "
+                      +maBiblio.getListDeLivres().get(i).getAnnee()+"\n"
+                      +maBiblio.getListDeLivres().get(i).getLangue() ;
+        }
+        labelCR.setText(cr);
+    }
 
 
 
+    private void createBook(String tire,String auteur , Integer annee, String maison,
+                            String langue, Integer reference, Biblio maBiblio) {
 
 
 
+        Livre monLivre = new Livre(tire,auteur , annee, maison,  langue, reference);
 
-
-
-
-
-
+        maBiblio.AddBook(monLivre);
 
 
     }
+
+
+
+   private void getAllBooksWhithIDSNOddTextField(Biblio maBiblio, JTextField jTextField){
+       ArrayList arrayList = maBiblio.getAllBooksWhithIDSNOdd();
+       String cr = "";
+       for (int i = 0; i< maBiblio.getListDeLivres().size(); i++){
+
+           cr +=    maBiblio.getListDeLivres().get(i).getIndiceRef()+" \n "
+                   +maBiblio.getListDeLivres().get(i).getTitre() + " \n "
+                   +maBiblio.getListDeLivres().get(i).getAuteur() +" \n "
+                   +maBiblio.getListDeLivres().get(i).getEditeur()+" \n"
+                   +maBiblio.getListDeLivres().get(i).getAnnee()+"\n"
+                   +maBiblio.getListDeLivres().get(i).getLangue() ;
+       }
+
+       jTextField.setText(cr);
+
+
+   }
+
+
+   private void clean(JTextField titre,  JTextField auteur,JTextField  annee,JTextField  maison,JTextField  langue,JTextField reference){
+       titre.setText("");
+       auteur.setText("");
+       annee.setText("");
+       maison.setText("");
+       langue.setText("");
+     reference.setText("");
+
+
+   };
+
 
 
 }
