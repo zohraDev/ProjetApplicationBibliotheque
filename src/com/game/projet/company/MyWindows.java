@@ -85,14 +85,13 @@ public class MyWindows extends JFrame {
 
 
 
-        JTextField zoneAfficher = new JTextField();                                 /***  Zone d'affichage ****/
+        JTextArea zoneAfficher = new JTextArea();                                 /***  Zone d'affichage ****/
         zoneAfficher.setPreferredSize(new Dimension(200,200));
         container.add(zoneAfficher);
 
-        JTextField zoneAfficher2 = new JTextField();                                 /***  Zone d'affichage ****/
-        zoneAfficher2.setPreferredSize(new Dimension(200,200));
-        container.add(zoneAfficher2);
 
+
+/*******************************************************************************************************************************/
 
         JButton ajoutLivre =new JButton();
         ajoutLivre.setText("Ajouter");
@@ -115,45 +114,65 @@ public class MyWindows extends JFrame {
                                          }
                                      });
         container.add(ajoutLivre);
+/*******************************************************************************************************************************/
 
 
 
+
+
+/*******************************************************************************************************************************/
         JButton tLivres = new JButton(" Tout les lires");                        /****  Boutton  pour afficher tous les livres****/
        container.add(tLivres);
 
 
-
-
-
-        JButton titreA = new JButton(" livre titres A");                        /****  Boutton  pour afficher tous les livres
-                                                                                        dont le titre commence par A****/
-       titreA.addActionListener(new ActionListener() {
-           @Override
-           public void actionPerformed(ActionEvent e) {
-               getAllBooksWhithIDSNOddTextField(maBiblio,zoneAfficher2);
-           }
-       });
-
-        container.add(titreA);
-
-
-
-
         tLivres.addActionListener( new ActionListener() {
                                        public void actionPerformed(ActionEvent e) {
+                                           zoneAfficher.setText(null);
                                            affichLivreBiblio(maBiblio, zoneAfficher);
                                        }
                                    }
         );
+/*******************************************************************************************************************************/
 
 
 
+/*******************************************************************************************************************************/
+
+        JButton titreA = new JButton(" livre titres A");                        /****  Boutton  pour afficher tous les livres
+                                                                                        dont la reference est un nombre impaire ****/
+       titreA.addActionListener(new ActionListener() {
+           @Override
+           public void actionPerformed(ActionEvent e) {
+               zoneAfficher.setText(null);
+               getAllBooksWithNameStartByAFieled(maBiblio, zoneAfficher);
+
+
+           }
+       });
+
+        container.add(titreA);
+/*******************************************************************************************************************************/
+
+
+
+
+
+/*******************************************************************************************************************************/
 
         JButton refAmpaire = new JButton(" Référence Imapaire");              /****  Boutton  pour afficher tous les livres****/
                                                                                    /***  dont la référence est imapire ****/
         container.add(refAmpaire);
+        refAmpaire.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                zoneAfficher.setText(null);
+                getAllBooksWhithIDSNOddTextField(maBiblio,zoneAfficher);
 
 
+            }
+        });
+/*******************************************************************************************************************************/
 
 
         JMenuBar monMenu = new JMenuBar();
@@ -185,16 +204,16 @@ public class MyWindows extends JFrame {
 
 
 
-    private void affichLivreBiblio(Biblio maBiblio, JTextField  labelCR) {
+    private void affichLivreBiblio(Biblio maBiblio, JTextArea labelCR) {
         String cr = "";
         for (int i = 0; i< maBiblio.getListDeLivres().size(); i++){
 
-            cr +=     maBiblio.getListDeLivres().get(i).getIndiceRef()+" \n "
-                      +maBiblio.getListDeLivres().get(i).getTitre() + " \n "
-                      +maBiblio.getListDeLivres().get(i).getAuteur() +" \n "
-                      +maBiblio.getListDeLivres().get(i).getEditeur()+" \n "
-                      +maBiblio.getListDeLivres().get(i).getAnnee()+"\n"
-                      +maBiblio.getListDeLivres().get(i).getLangue() ;
+            cr +=     maBiblio.getListDeLivres().get(i).getIndiceRef()+" -- "
+                      +maBiblio.getListDeLivres().get(i).getTitre() + " -- "
+                      +maBiblio.getListDeLivres().get(i).getAuteur() +" --"
+                      +maBiblio.getListDeLivres().get(i).getEditeur()+" -- "
+                      +maBiblio.getListDeLivres().get(i).getAnnee()+"--"
+                      +maBiblio.getListDeLivres().get(i).getLangue()+"\n" ;
         }
         labelCR.setText(cr);
     }
@@ -215,17 +234,14 @@ public class MyWindows extends JFrame {
 
 
 
-   private void getAllBooksWhithIDSNOddTextField(Biblio maBiblio, JTextField jTextField){
+   private void getAllBooksWhithIDSNOddTextField(Biblio maBiblio, JTextArea jTextField){
        ArrayList arrayList = maBiblio.getAllBooksWhithIDSNOdd();
        String cr = "";
-       for (int i = 0; i< maBiblio.getListDeLivres().size(); i++){
+       for (int i = 0; i< arrayList.size(); i++){
 
-           cr +=    maBiblio.getListDeLivres().get(i).getIndiceRef()+" \n "
-                   +maBiblio.getListDeLivres().get(i).getTitre() + " \n "
-                   +maBiblio.getListDeLivres().get(i).getAuteur() +" \n "
-                   +maBiblio.getListDeLivres().get(i).getEditeur()+" \n"
-                   +maBiblio.getListDeLivres().get(i).getAnnee()+"\n"
-                   +maBiblio.getListDeLivres().get(i).getLangue() ;
+
+           cr +=    arrayList.get(i)+" \n ";
+
        }
 
        jTextField.setText(cr);
@@ -244,6 +260,20 @@ public class MyWindows extends JFrame {
 
 
    };
+
+    private void    getAllBooksWithNameStartByAFieled(Biblio maBiblio, JTextArea jTextField){
+
+        ArrayList arrayList = maBiblio.getAllBooksWithNameStartByA();
+        String cr = "";
+        for (int i = 0; i< arrayList.size(); i++){
+
+            cr +=    arrayList.get(i)+" \n ";
+        }
+
+        jTextField.setText(cr);
+
+
+    }
 
 
 

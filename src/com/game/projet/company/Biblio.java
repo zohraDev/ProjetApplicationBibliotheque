@@ -67,7 +67,9 @@ import java.util.ArrayList;
         public ArrayList<String> getAllBooksWhithIDSNOdd(){
             ArrayList<String> maSousListe = new ArrayList<>();
             for (int i = 0; i<this.getListDeLivres().size(); i++){
+
                 Livre monLivreATester = this.getListDeLivres().get(i);
+
                 if (monLivreATester.getIndiceRef() % 2 == 1){
                     maSousListe.add(monLivreATester.getTitre() + " / " + monLivreATester.getIndiceRef());
                 }
