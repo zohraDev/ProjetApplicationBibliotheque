@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
     public class Biblio {
 
-        private  static ArrayList<Livre> listDeLivres;
+        private   ArrayList<Livre> listDeLivres;
 
 
         /**

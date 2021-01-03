@@ -12,23 +12,26 @@ public class MyWindows extends JFrame {
         super("Gestion de la bibliothèque");
 
         //this.setBackground(Color.green);
-        this.setVisible(true);
+        //this.setVisible(true);
         this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        this.setSize(600,800);
+        this.setSize(600,250);
         //this.setLocationRelativeTo(null);
         Biblio maBiblio=new Biblio();
 
+        JPanel pan = new JPanel(); pan.setBackground(Color.gray);
+        pan.setLayout(new GridLayout(7, 2));
 
-        /**************   Seconde couche *********************/
-        JPanel container = (JPanel) this.getContentPane();
+        JPanel pan2 = new JPanel(); pan2.setBackground(Color.darkGray);
+        pan2.setLayout(new BorderLayout());
+
+
+
 
 
         /****************************** *****************************/
 
         /*********************  Gesionnaire de  positions ***********/
 
-        FlowLayout monLayout = new FlowLayout();
-        container.setLayout(monLayout);
 
 
 
@@ -37,23 +40,23 @@ public class MyWindows extends JFrame {
         JLabel refeLivre = new JLabel("Référence : " );                                 /***** La reference ****/
         JTextField reference= new JTextField();
         reference.setPreferredSize(new Dimension(100, 25));
-        container.add(refeLivre);
-        container.add(reference);
+        pan.add(refeLivre);
+        pan.add(reference);
 
 
         JLabel tireLivre = new JLabel("Titre : " );                                 /***** Le titre ****/
         JTextField titre = new JTextField();
         titre.setPreferredSize(new Dimension(100, 25));
-        container.add(tireLivre);
-        container.add(titre);
+        pan.add(tireLivre);
+        pan.add(titre);
 
 
 
         JLabel nomAuteur = new JLabel("Nome auteur : ");                          /** Le nom de l'auteur**/
         JTextField auteur = new JTextField();
         auteur.setPreferredSize(new Dimension(100, 25));
-        container.add(nomAuteur);
-        container.add(auteur);
+        pan.add(nomAuteur);
+        pan.add(auteur);
 
 
 
@@ -61,8 +64,8 @@ public class MyWindows extends JFrame {
         JLabel maisonEdition = new JLabel("Maison Edition : ");                     /** Maison d'édition **/
         JTextField maison = new JTextField();
         maison.setPreferredSize(new Dimension(100, 25));
-        container.add(maisonEdition);
-        container.add(maison);
+        pan.add(maisonEdition);
+        pan.add(maison);
 
 
 
@@ -71,8 +74,8 @@ public class MyWindows extends JFrame {
         JTextField annee = new JTextField();
         annee.setPreferredSize(new Dimension(100, 25));
 
-        container.add(anneeEdition);
-        container.add(annee);
+        pan.add(anneeEdition);
+        pan.add(annee);
 
 
 
@@ -80,14 +83,18 @@ public class MyWindows extends JFrame {
         JLabel langueLivre = new JLabel("Langue  : ");                            /**  Langue  d'édition **/
         JTextField langue = new JTextField();
         langue.setPreferredSize(new Dimension(100, 25));
-        container.add(langueLivre);
-        container.add(langue);
+        pan.add(langueLivre);
+        pan.add(langue);
 
 
 
         JTextArea zoneAfficher = new JTextArea();                                 /***  Zone d'affichage ****/
+
+
         zoneAfficher.setPreferredSize(new Dimension(200,200));
-        container.add(zoneAfficher);
+        pan2.add(zoneAfficher, BorderLayout.NORTH);
+
+
 
 
 
@@ -113,7 +120,7 @@ public class MyWindows extends JFrame {
 
                                          }
                                      });
-        container.add(ajoutLivre);
+        pan.add(ajoutLivre);
 /*******************************************************************************************************************************/
 
 
@@ -122,7 +129,8 @@ public class MyWindows extends JFrame {
 
 /*******************************************************************************************************************************/
         JButton tLivres = new JButton(" Tout les lires");                        /****  Boutton  pour afficher tous les livres****/
-       container.add(tLivres);
+        tireLivre.setMaximumSize(new Dimension(30,25));
+        pan2.add(tLivres,BorderLayout.WEST);
 
 
         tLivres.addActionListener( new ActionListener() {
@@ -139,8 +147,9 @@ public class MyWindows extends JFrame {
 /*******************************************************************************************************************************/
 
         JButton titreA = new JButton(" livre titres A");                        /****  Boutton  pour afficher tous les livres
-                                                                                        dont la reference est un nombre impaire ****/
-       titreA.addActionListener(new ActionListener() {
+                                                                                               dont la reference est un nombre impaire ****/
+       titreA.setMaximumSize(new Dimension(30,25));
+        titreA.addActionListener(new ActionListener() {
            @Override
            public void actionPerformed(ActionEvent e) {
                zoneAfficher.setText(null);
@@ -150,7 +159,7 @@ public class MyWindows extends JFrame {
            }
        });
 
-        container.add(titreA);
+        pan2.add(titreA, BorderLayout.CENTER);
 /*******************************************************************************************************************************/
 
 
@@ -161,7 +170,8 @@ public class MyWindows extends JFrame {
 
         JButton refAmpaire = new JButton(" Référence Imapaire");              /****  Boutton  pour afficher tous les livres****/
                                                                                    /***  dont la référence est imapire ****/
-        container.add(refAmpaire);
+        refAmpaire.setMaximumSize(new Dimension(30,25));
+        pan2.add(refAmpaire, BorderLayout.EAST);
         refAmpaire.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -174,6 +184,13 @@ public class MyWindows extends JFrame {
         });
 /*******************************************************************************************************************************/
 
+        JSplitPane split = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, pan, pan2);
+
+       this.getContentPane().add(split, BorderLayout.CENTER);
+
+
+        this.setVisible(true);
+
 
         JMenuBar monMenu = new JMenuBar();
         this.setJMenuBar(monMenu);
@@ -182,6 +199,14 @@ public class MyWindows extends JFrame {
         monMenu.add(menuFichier);
 
         JMenuItem subMenuExit = new JMenuItem("Exit");
+
+        subMenuExit.addActionListener( new ActionListener() {
+                                           public void actionPerformed(ActionEvent e) {
+                                               System.exit(0);
+                                           }
+                                       }
+        );
+
         JMenuItem subMenuNew = new JMenuItem("Nouveau");
 
         menuFichier.add(subMenuNew);
